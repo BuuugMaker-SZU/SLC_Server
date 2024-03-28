@@ -2,6 +2,7 @@ package apis
 
 import (
 	"SmartLinkProject/app/SLC/models"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-admin-team/go-admin-core/sdk/api"
@@ -195,7 +196,7 @@ func (e SysLoc) Get2Tree(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	list := make([]dto.DeptLabel, 0)
+	list := make([]dto.LocLabel, 0)
 	list, err = s.SetLocTree(&req)
 	if err != nil {
 		e.Error(500, err, "查询失败")
@@ -218,7 +219,7 @@ func (e SysLoc) GetLocTreeRoleSelect(c *gin.Context) {
 	}
 
 	id, err := pkg.StringToInt(c.Param("roleId"))
-	result, err := s.SetDeptLabel()
+	result, err := s.SetLocLabel()
 	if err != nil {
 		e.Error(500, err, err.Error())
 		return

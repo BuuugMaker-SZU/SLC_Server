@@ -233,9 +233,9 @@ func (e *SysMenu) SetLabel() (m []dto.MenuLabel, err error) {
 		e := dto.MenuLabel{}
 		e.Id = list[i].MenuId
 		e.Label = list[i].Title
-		deptsInfo := menuLabelCall(&list, e)
+		locsInfo := menuLabelCall(&list, e)
 
-		m = append(m, deptsInfo)
+		m = append(m, locsInfo)
 	}
 	return
 }
@@ -274,13 +274,13 @@ func (e *SysMenu) GetSysMenuByRoleName(roleName ...string) ([]models.SysMenu, er
 }
 
 // menuLabelCall 递归构造组织数据
-func menuLabelCall(eList *[]models.SysMenu, dept dto.MenuLabel) dto.MenuLabel {
+func menuLabelCall(eList *[]models.SysMenu, loc dto.MenuLabel) dto.MenuLabel {
 	list := *eList
 
 	min := make([]dto.MenuLabel, 0)
 	for j := 0; j < len(list); j++ {
 
-		if dept.Id != list[j].ParentId {
+		if loc.Id != list[j].ParentId {
 			continue
 		}
 		mi := dto.MenuLabel{}
@@ -295,11 +295,11 @@ func menuLabelCall(eList *[]models.SysMenu, dept dto.MenuLabel) dto.MenuLabel {
 		}
 	}
 	if len(min) > 0 {
-		dept.Children = min
+		loc.Children = min
 	} else {
-		dept.Children = nil
+		loc.Children = nil
 	}
-	return dept
+	return loc
 }
 
 // menuCall 构建菜单树

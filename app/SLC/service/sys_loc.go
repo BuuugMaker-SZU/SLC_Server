@@ -19,10 +19,10 @@ type SysLoc struct {
 	service.Service
 }
 
-// GetPage 获取SysDept列表
-//func (e *SysDept) GetPage(c *dto.SysDeptGetPageReq, list *[]models.SysDept) error {
+// GetPage 获取Sysloc列表
+//func (e *Sysloc) GetPage(c *dto.SyslocGetPageReq, list *[]models.Sysloc) error {
 //	var err error
-//	var data models.SysDept
+//	var data models.Sysloc
 //
 //	err = e.Orm.Model(&data).
 //		Scopes(
@@ -74,17 +74,17 @@ func (e *SysLoc) Insert(c *dto.SysLocInsertReq) error {
 		e.Log.Errorf("db error:%s", err)
 		return err
 	}
-	deptPath := pkg.IntToString(data.LocId) + "/"
+	locPath := pkg.IntToString(data.LocId) + "/"
 	if data.ParentId != 0 {
-		var deptP models.SysLoc
-		tx.First(&deptP, data.ParentId)
-		deptPath = deptP.LocPath + deptPath
+		var locP models.SysLoc
+		tx.First(&locP, data.ParentId)
+		locPath = locP.LocPath + locPath
 	} else {
-		deptPath = "/0/" + deptPath
+		locPath = "/0/" + locPath
 	}
 	var mp = map[string]string{}
-	mp["dept_path"] = deptPath
-	if err := tx.Model(&data).Update("loc_path", deptPath).Error; err != nil {
+	mp["loc_path"] = locPath
+	if err := tx.Model(&data).Update("loc_path", locPath).Error; err != nil {
 		e.Log.Errorf("db error:%s", err)
 		return err
 	}
@@ -106,15 +106,15 @@ func (e *SysLoc) Update(c *dto.SysLocUpdateReq) error {
 	tx.First(&model, c.GetId())
 	c.Generate(&model)
 
-	deptPath := pkg.IntToString(model.LocId) + "/"
+	locPath := pkg.IntToString(model.LocId) + "/"
 	if model.ParentId != 0 {
-		var deptP models.SysLoc
-		tx.First(&deptP, model.ParentId)
-		deptPath = deptP.LocPath + deptPath
+		var locP models.SysLoc
+		tx.First(&locP, model.ParentId)
+		locPath = locP.LocPath + locPath
 	} else {
-		deptPath = "/0/" + deptPath
+		locPath = "/0/" + locPath
 	}
-	model.LocPath = deptPath
+	model.LocPath = locPath
 	db := tx.Save(&model)
 	if err = db.Error; err != nil {
 		e.Log.Errorf("UpdateSysLoc error:%s", err)
@@ -162,42 +162,42 @@ func (e *SysLoc) getList(c *dto.SysLocGetPageReq, list *[]models.SysLoc) error {
 }
 
 // SetLocTree 设置组织数据
-func (e *SysLoc) SetLocTree(c *dto.SysLocGetPageReq) (m []dto.DeptLabel, err error) {
+func (e *SysLoc) SetLocTree(c *dto.SysLocGetPageReq) (m []dto.LocLabel, err error) {
 	var list []models.SysLoc
 	err = e.getList(c, &list)
 
-	m = make([]dto.DeptLabel, 0)
+	m = make([]dto.LocLabel, 0)
 	for i := 0; i < len(list); i++ {
 		if list[i].ParentId != 0 {
 			continue
 		}
-		e := dto.DeptLabel{}
+		e := dto.LocLabel{}
 		e.Id = list[i].LocId
 		e.Label = list[i].LocName
-		deptsInfo := deptTreeCall(&list, e)
+		locsInfo := locTreeCall(&list, e)
 
-		m = append(m, deptsInfo)
+		m = append(m, locsInfo)
 	}
 	return
 }
 
 // Call 递归构造组织数据
-func deptTreeCall(deptList *[]models.SysLoc, dept dto.DeptLabel) dto.DeptLabel {
-	list := *deptList
-	min := make([]dto.DeptLabel, 0)
+func locTreeCall(locList *[]models.SysLoc, loc dto.LocLabel) dto.LocLabel {
+	list := *locList
+	min := make([]dto.LocLabel, 0)
 	for j := 0; j < len(list); j++ {
-		if dept.Id != list[j].ParentId {
+		if loc.Id != list[j].ParentId {
 			continue
 		}
-		mi := dto.DeptLabel{Id: list[j].LocId, Label: list[j].LocName, Children: []dto.DeptLabel{}}
-		ms := deptTreeCall(deptList, mi)
+		mi := dto.LocLabel{Id: list[j].LocId, Label: list[j].LocName, Children: []dto.LocLabel{}}
+		ms := locTreeCall(locList, mi)
 		min = append(min, ms)
 	}
-	dept.Children = min
-	return dept
+	loc.Children = min
+	return loc
 }
 
-// SetLocPage 设置dept页面数据
+// SetLocPage 设置loc页面数据
 func (e *SysLoc) SetLocPage(c *dto.SysLocGetPageReq) (m []models.SysLoc, err error) {
 	var list []models.SysLoc
 	err = e.getList(c, &list)
@@ -211,8 +211,8 @@ func (e *SysLoc) SetLocPage(c *dto.SysLocGetPageReq) (m []models.SysLoc, err err
 	return
 }
 
-func (e *SysLoc) LocPageCall(deptlist *[]models.SysLoc, menu models.SysLoc) models.SysLoc {
-	list := *deptlist
+func (e *SysLoc) LocPageCall(loclist *[]models.SysLoc, menu models.SysLoc) models.SysLoc {
+	list := *loclist
 	min := make([]models.SysLoc, 0)
 	for j := 0; j < len(list); j++ {
 		if menu.LocId != list[j].ParentId {
@@ -230,7 +230,7 @@ func (e *SysLoc) LocPageCall(deptlist *[]models.SysLoc, menu models.SysLoc) mode
 		mi.Status = list[j].Status
 		mi.CreatedAt = list[j].CreatedAt
 		mi.Children = []models.SysLoc{}
-		ms := e.LocPageCall(deptlist, mi)
+		ms := e.LocPageCall(loclist, mi)
 		min = append(min, ms)
 	}
 	menu.Children = min
@@ -239,57 +239,57 @@ func (e *SysLoc) LocPageCall(deptlist *[]models.SysLoc, menu models.SysLoc) mode
 
 // GetWithRoleId 获取角色的区域ID集合
 func (e *SysLoc) GetWithRoleId(roleId int) ([]int, error) {
-	deptIds := make([]int, 0)
-	deptList := make([]dto.LocIdList, 0)
-	if err := e.Orm.Table("sys_role_dept").
-		Select("sys_role_dept.dept_id").
-		Joins("LEFT JOIN sys_dept on sys_dept.dept_id=sys_role_dept.dept_id").
+	locIds := make([]int, 0)
+	locList := make([]dto.LocIdList, 0)
+	if err := e.Orm.Table("sys_role_loc").
+		Select("sys_role_loc.loc_id").
+		Joins("LEFT JOIN sys_loc on sys_loc.loc_id=sys_role_loc.loc_id").
 		Where("role_id = ? ", roleId).
-		Where(" sys_role_dept.dept_id not in(select sys_dept.parent_id from sys_role_dept LEFT JOIN sys_dept on sys_dept.dept_id=sys_role_dept.dept_id where role_id =? )", roleId).
-		Find(&deptList).Error; err != nil {
+		Where(" sys_role_loc.loc_id not in(select sys_loc.parent_id from sys_role_loc LEFT JOIN sys_loc on sys_loc.loc_id=sys_role_loc.loc_id where role_id =? )", roleId).
+		Find(&locList).Error; err != nil {
 		return nil, err
 	}
-	for i := 0; i < len(deptList); i++ {
-		deptIds = append(deptIds, deptList[i].LocId)
+	for i := 0; i < len(locList); i++ {
+		locIds = append(locIds, locList[i].LocId)
 	}
-	return deptIds, nil
+	return locIds, nil
 }
 
-func (e *SysLoc) SetDeptLabel() (m []dto.DeptLabel, err error) {
+func (e *SysLoc) SetLocLabel() (m []dto.LocLabel, err error) {
 	list := make([]models.SysLoc, 0)
 	err = e.Orm.Find(&list).Error
 	if err != nil {
-		log.Error("find dept list error, %s", err.Error())
+		log.Error("find loc list error, %s", err.Error())
 		return
 	}
-	m = make([]dto.DeptLabel, 0)
-	var item dto.DeptLabel
+	m = make([]dto.LocLabel, 0)
+	var item dto.LocLabel
 	for i := range list {
 		if list[i].ParentId != 0 {
 			continue
 		}
-		item = dto.DeptLabel{}
+		item = dto.LocLabel{}
 		item.Id = list[i].LocId
 		item.Label = list[i].LocName
-		deptInfo := deptLabelCall(&list, item)
-		m = append(m, deptInfo)
+		locInfo := LocLabelCall(&list, item)
+		m = append(m, locInfo)
 	}
 	return
 }
 
-// deptLabelCall
-func deptLabelCall(deptList *[]models.SysLoc, dept dto.DeptLabel) dto.DeptLabel {
-	list := *deptList
-	var mi dto.DeptLabel
-	min := make([]dto.DeptLabel, 0)
+// LocLabelCall
+func LocLabelCall(locList *[]models.SysLoc, loc dto.LocLabel) dto.LocLabel {
+	list := *locList
+	var mi dto.LocLabel
+	min := make([]dto.LocLabel, 0)
 	for j := 0; j < len(list); j++ {
-		if dept.Id != list[j].ParentId {
+		if loc.Id != list[j].ParentId {
 			continue
 		}
-		mi = dto.DeptLabel{Id: list[j].LocId, Label: list[j].LocName, Children: []dto.DeptLabel{}}
-		ms := deptLabelCall(deptList, mi)
+		mi = dto.LocLabel{Id: list[j].LocId, Label: list[j].LocName, Children: []dto.LocLabel{}}
+		ms := LocLabelCall(locList, mi)
 		min = append(min, ms)
 	}
-	dept.Children = min
-	return dept
+	loc.Children = min
+	return loc
 }

@@ -103,8 +103,8 @@ func (s *SysLocDeleteReq) GetId() interface{} {
 	return s.Ids
 }
 
-type DeptLabel struct {
-	Id       int         `gorm:"-" json:"id"`
-	Label    string      `gorm:"-" json:"label"`
-	Children []DeptLabel `gorm:"-" json:"children"`
+type LocLabel struct {
+	Id       int        `gorm:"-" json:"id"`
+	Label    string     `gorm:"-" json:"label"`
+	Children []LocLabel `gorm:"-" json:"children"`
 }
