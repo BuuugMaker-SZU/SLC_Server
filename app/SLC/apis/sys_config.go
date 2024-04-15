@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-admin-team/go-admin-core/sdk/api"
-	"github.com/go-admin-team/go-admin-core/sdk/pkg/jwtauth/user"
 
 	"SmartLinkProject/app/SLC/models"
 	"SmartLinkProject/app/SLC/service"
@@ -106,7 +105,6 @@ func (e SysConfig) Insert(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	req.SetCreateBy(user.GetUserId(c))
 
 	err = s.Insert(&req)
 	if err != nil {
@@ -139,7 +137,6 @@ func (e SysConfig) Update(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	req.SetUpdateBy(user.GetUserId(c))
 	err = s.Update(&req)
 	if err != nil {
 		e.Error(500, err, "更新失败")
@@ -169,7 +166,6 @@ func (e SysConfig) Delete(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	req.SetUpdateBy(user.GetUserId(c))
 
 	err = s.Remove(&req)
 	if err != nil {

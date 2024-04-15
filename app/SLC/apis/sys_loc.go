@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-admin-team/go-admin-core/sdk/api"
 	"github.com/go-admin-team/go-admin-core/sdk/pkg"
-	"github.com/go-admin-team/go-admin-core/sdk/pkg/jwtauth/user"
 	_ "github.com/go-admin-team/go-admin-core/sdk/pkg/response"
 
 	"SmartLinkProject/app/SLC/service"
@@ -106,9 +105,6 @@ func (e SysLoc) Insert(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-
-	// 设置创建人
-	req.SetCreateBy(user.GetUserId(c))
 	err = s.Insert(&req)
 	if err != nil {
 		e.Error(500, err, "创建失败")
@@ -142,7 +138,6 @@ func (e SysLoc) Update(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	req.SetUpdateBy(user.GetUserId(c))
 	err = s.Update(&req)
 	if err != nil {
 		e.Error(500, err, err.Error())

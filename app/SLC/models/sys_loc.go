@@ -12,7 +12,7 @@ type SysLoc struct {
 	Phone    string `json:"phone" gorm:"size:11;"`                  //手机
 	Email    string `json:"email" gorm:"size:64;"`                  //邮箱
 	Status   int    `json:"status" gorm:"size:4;"`                  //状态
-	models.ControlBy
+
 	models.ModelTime
 	DataScope string   `json:"dataScope" gorm:"-"`
 	Params    string   `json:"params" gorm:"-"`

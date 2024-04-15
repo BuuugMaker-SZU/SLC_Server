@@ -114,8 +114,6 @@ func (e SysUser) Insert(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	// 设置创建人
-	req.SetCreateBy(user.GetUserId(c))
 	err = s.Insert(&req)
 	if err != nil {
 		e.Logger.Error(err)
@@ -150,8 +148,6 @@ func (e SysUser) Update(c *gin.Context) {
 		return
 	}
 
-	req.SetUpdateBy(user.GetUserId(c))
-
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
 
@@ -184,9 +180,6 @@ func (e SysUser) Delete(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-
-	// 设置编辑人
-	req.SetUpdateBy(user.GetUserId(c))
 
 	// 数据权限检查
 	p := actions.GetPermissionFromContext(c)
@@ -271,7 +264,6 @@ func (e SysUser) UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	req.SetUpdateBy(user.GetUserId(c))
 
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
@@ -308,7 +300,6 @@ func (e SysUser) ResetPwd(c *gin.Context) {
 		return
 	}
 
-	req.SetUpdateBy(user.GetUserId(c))
 
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)

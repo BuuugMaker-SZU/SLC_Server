@@ -16,7 +16,7 @@ type SysDictData struct {
 	Status    int    `json:"status" gorm:"size:4;comment:Status"`
 	Default   string `json:"default" gorm:"size:8;comment:Default"`
 	Remark    string `json:"remark" gorm:"size:255;comment:Remark"`
-	models.ControlBy
+
 	models.ModelTime
 }
 

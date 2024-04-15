@@ -12,7 +12,7 @@ type SysConfig struct {
 	ConfigType  string `json:"configType" gorm:"size:64;comment:ConfigType"`
 	IsFrontend  string `json:"isFrontend" gorm:"size:64;comment:是否前台"` //
 	Remark      string `json:"remark" gorm:"size:128;comment:Remark"`  //
-	models.ControlBy
+
 	models.ModelTime
 }
 

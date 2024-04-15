@@ -45,7 +45,6 @@ type SysConfigControl struct {
 	ConfigType  string `json:"configType" comment:""`
 	IsFrontend  string `json:"isFrontend"`
 	Remark      string `json:"remark" comment:""`
-	common.ControlBy
 }
 
 // Generate 结构体数据转化 从 SysConfigControl 至 system.SysConfig 对应的模型
@@ -104,7 +103,6 @@ func (s *SysConfigGetReq) GetId() interface{} {
 
 type SysConfigDeleteReq struct {
 	Ids []int `json:"ids"`
-	common.ControlBy
 }
 
 func (s *SysConfigDeleteReq) GetId() interface{} {

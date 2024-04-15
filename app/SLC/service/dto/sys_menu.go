@@ -2,7 +2,6 @@ package dto
 
 import (
 	"SmartLinkProject/app/SLC/models"
-	common "SmartLinkProject/common/models"
 
 	"SmartLinkProject/common/dto"
 )
@@ -37,7 +36,7 @@ type SysMenuInsertReq struct {
 	Sort       int             `form:"sort" comment:"排序"`          //排序
 	Visible    string          `form:"visible" comment:"是否显示"`     //是否显示
 	IsFrame    string          `form:"isFrame" comment:"是否frame"`  //是否frame
-	common.ControlBy
+
 }
 
 func (s *SysMenuInsertReq) Generate(model *models.SysMenu) {
@@ -60,12 +59,7 @@ func (s *SysMenuInsertReq) Generate(model *models.SysMenu) {
 	model.Sort = s.Sort
 	model.Visible = s.Visible
 	model.IsFrame = s.IsFrame
-	if s.CreateBy != 0 {
-		model.CreateBy = s.CreateBy
-	}
-	if s.UpdateBy != 0 {
-		model.UpdateBy = s.UpdateBy
-	}
+
 }
 
 func (s *SysMenuInsertReq) GetId() interface{} {
@@ -91,7 +85,7 @@ type SysMenuUpdateReq struct {
 	Sort       int             `form:"sort" comment:"排序"`          //排序
 	Visible    string          `form:"visible" comment:"是否显示"`     //是否显示
 	IsFrame    string          `form:"isFrame" comment:"是否frame"`  //是否frame
-	common.ControlBy
+
 }
 
 func (s *SysMenuUpdateReq) Generate(model *models.SysMenu) {
@@ -114,12 +108,7 @@ func (s *SysMenuUpdateReq) Generate(model *models.SysMenu) {
 	model.Sort = s.Sort
 	model.Visible = s.Visible
 	model.IsFrame = s.IsFrame
-	if s.CreateBy != 0 {
-		model.CreateBy = s.CreateBy
-	}
-	if s.UpdateBy != 0 {
-		model.UpdateBy = s.UpdateBy
-	}
+
 }
 
 func (s *SysMenuUpdateReq) GetId() interface{} {
@@ -136,7 +125,6 @@ func (s *SysMenuGetReq) GetId() interface{} {
 
 type SysMenuDeleteReq struct {
 	Ids []int `json:"ids"`
-	common.ControlBy
 }
 
 func (s *SysMenuDeleteReq) GetId() interface{} {

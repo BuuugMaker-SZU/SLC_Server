@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-admin-team/go-admin-core/sdk/api"
-	"github.com/go-admin-team/go-admin-core/sdk/pkg/jwtauth/user"
 	_ "github.com/go-admin-team/go-admin-core/sdk/pkg/response"
 
 	"SmartLinkProject/app/SLC/models"
@@ -108,7 +107,6 @@ func (e SysApi) Update(c *gin.Context) {
 		e.Logger.Error(err)
 		return
 	}
-	req.SetUpdateBy(user.GetUserId(c))
 	p := actions.GetPermissionFromContext(c)
 	err = s.Update(&req, p)
 	if err != nil {

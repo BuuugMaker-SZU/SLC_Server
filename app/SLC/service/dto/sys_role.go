@@ -2,7 +2,6 @@ package dto
 
 import (
 	"SmartLinkProject/app/SLC/models"
-	common "SmartLinkProject/common/models"
 
 	"SmartLinkProject/common/dto"
 )
@@ -47,7 +46,6 @@ type SysRoleInsertReq struct {
 	MenuIds   []int            `form:"menuIds"`
 	SysLoc    []models.SysLoc  `form:"sysLoc"`
 	LocIds    []int            `form:"locIds"`
-	common.ControlBy
 }
 
 func (s *SysRoleInsertReq) Generate(model *models.SysRole) {
@@ -84,7 +82,6 @@ type SysRoleUpdateReq struct {
 	MenuIds   []int            `form:"menuIds"`
 	SysLoc    []models.SysLoc  `form:"sysLoc"`
 	LocIds    []int            `form:"locIds"`
-	common.ControlBy
 }
 
 func (s *SysRoleUpdateReq) Generate(model *models.SysRole) {
@@ -110,7 +107,7 @@ func (s *SysRoleUpdateReq) GetId() interface{} {
 type UpdateStatusReq struct {
 	RoleId int    `form:"roleId" comment:"角色编码"` // 角色编码
 	Status string `form:"status" comment:"状态"`   // 状态
-	common.ControlBy
+
 }
 
 func (s *UpdateStatusReq) Generate(model *models.SysRole) {

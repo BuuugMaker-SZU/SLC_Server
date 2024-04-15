@@ -17,7 +17,7 @@ type SysRole struct {
 	LocIds    []int      `json:"locIds" gorm:"-"`
 	SysLoc    []SysLoc   `json:"sysLoc" gorm:"many2many:sys_role_loc;foreignKey:RoleId;joinForeignKey:role_id;references:LocId;joinReferences:loc_id;"`
 	SysMenu   *[]SysMenu `json:"sysMenu" gorm:"many2many:sys_role_menu;foreignKey:RoleId;joinForeignKey:role_id;references:MenuId;joinReferences:menu_id;"`
-	models.ControlBy
+
 	models.ModelTime
 }
 

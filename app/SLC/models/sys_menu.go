@@ -26,7 +26,7 @@ type SysMenu struct {
 	RoleId     int       `gorm:"-"`
 	Children   []SysMenu `json:"children,omitempty" gorm:"-"`
 	IsSelect   bool      `json:"is_select" gorm:"-"`
-	models.ControlBy
+
 	models.ModelTime
 }
 

@@ -3,7 +3,6 @@ package dto
 import (
 	"SmartLinkProject/app/SLC/models"
 	"SmartLinkProject/common/dto"
-	common "SmartLinkProject/common/models"
 )
 
 type SysDictDataGetPageReq struct {
@@ -36,7 +35,6 @@ type SysDictDataInsertReq struct {
 	Status    int    `json:"status" comment:""`
 	Default   string `json:"default" comment:""`
 	Remark    string `json:"remark" comment:""`
-	common.ControlBy
 }
 
 func (s *SysDictDataInsertReq) Generate(model *models.SysDictData) {
@@ -69,7 +67,6 @@ type SysDictDataUpdateReq struct {
 	Status    int    `json:"status" comment:""`
 	Default   string `json:"default" comment:""`
 	Remark    string `json:"remark" comment:""`
-	common.ControlBy
 }
 
 func (s *SysDictDataUpdateReq) Generate(model *models.SysDictData) {
@@ -99,8 +96,7 @@ func (s *SysDictDataGetReq) GetId() interface{} {
 }
 
 type SysDictDataDeleteReq struct {
-	Ids              []int `json:"ids"`
-	common.ControlBy `json:"-"`
+	Ids []int `json:"ids"`
 }
 
 func (s *SysDictDataDeleteReq) GetId() interface{} {

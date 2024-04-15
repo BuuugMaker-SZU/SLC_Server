@@ -3,7 +3,6 @@ package dto
 import (
 	"SmartLinkProject/app/SLC/models"
 	"SmartLinkProject/common/dto"
-	common "SmartLinkProject/common/models"
 )
 
 // SysApiGetPageReq 功能列表请求参数
@@ -35,7 +34,6 @@ type SysApiInsertReq struct {
 	Path   string `json:"path" comment:"地址"`
 	Type   string `json:"type" comment:""`
 	Action string `json:"action" comment:"类型"`
-	common.ControlBy
 }
 
 func (s *SysApiInsertReq) Generate(model *models.SysApi) {
@@ -58,7 +56,6 @@ type SysApiUpdateReq struct {
 	Path   string `json:"path" comment:"地址"`
 	Type   string `json:"type" comment:""`
 	Action string `json:"action" comment:"类型"`
-	common.ControlBy
 }
 
 func (s *SysApiUpdateReq) Generate(model *models.SysApi) {

@@ -26,7 +26,7 @@ type SysUser struct {
 	RoleIds  []int    `json:"roleIds" gorm:"-"`
 	Loc      *SysLoc  `json:"loc"`
 	Role     *SysRole `json:"role"`
-	models.ControlBy
+
 	models.ModelTime
 }
 

@@ -10,7 +10,7 @@ type SysDictType struct {
 	DictType string `json:"dictType" gorm:"size:128;comment:DictType"`
 	Status   int    `json:"status" gorm:"size:4;comment:Status"`
 	Remark   string `json:"remark" gorm:"size:255;comment:Remark"`
-	models.ControlBy
+
 	models.ModelTime
 }
 

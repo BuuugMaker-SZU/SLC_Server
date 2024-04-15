@@ -4,7 +4,6 @@ import (
 	"SmartLinkProject/app/SLC/models"
 
 	"SmartLinkProject/common/dto"
-	common "SmartLinkProject/common/models"
 )
 
 type SysDictTypeGetPageReq struct {
@@ -29,7 +28,6 @@ type SysDictTypeInsertReq struct {
 	DictType string `json:"dictType"`
 	Status   int    `json:"status"`
 	Remark   string `json:"remark"`
-	common.ControlBy
 }
 
 func (s *SysDictTypeInsertReq) Generate(model *models.SysDictType) {
@@ -53,7 +51,6 @@ type SysDictTypeUpdateReq struct {
 	DictType string `json:"dictType"`
 	Status   int    `json:"status"`
 	Remark   string `json:"remark"`
-	common.ControlBy
 }
 
 func (s *SysDictTypeUpdateReq) Generate(model *models.SysDictType) {
@@ -81,7 +78,6 @@ func (s *SysDictTypeGetReq) GetId() interface{} {
 
 type SysDictTypeDeleteReq struct {
 	Ids []int `json:"ids"`
-	common.ControlBy
 }
 
 func (s *SysDictTypeDeleteReq) GetId() interface{} {

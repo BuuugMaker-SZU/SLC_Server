@@ -99,8 +99,6 @@ func (e SysMenu) Insert(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	// 设置创建人
-	req.SetCreateBy(user.GetUserId(c))
 	err = s.Insert(&req).Error
 	if err != nil {
 		e.Error(500, err, "创建失败")
@@ -134,7 +132,6 @@ func (e SysMenu) Update(c *gin.Context) {
 		return
 	}
 
-	req.SetUpdateBy(user.GetUserId(c))
 	err = s.Update(&req).Error
 	if err != nil {
 		e.Error(500, err, "更新失败")

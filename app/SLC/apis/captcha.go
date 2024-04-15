@@ -23,6 +23,7 @@ func (e System) GenerateCaptchaHandler(c *gin.Context) {
 		return
 	}
 	id, b64s, _, err := captcha.DriverDigitFunc()
+
 	if err != nil {
 		e.Logger.Errorf("DriverDigitFunc error, %s", err.Error())
 		e.Error(500, err, "验证码获取失败")

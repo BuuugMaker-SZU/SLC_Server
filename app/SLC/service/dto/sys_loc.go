@@ -2,7 +2,6 @@ package dto
 
 import (
 	"SmartLinkProject/app/SLC/models"
-	common "SmartLinkProject/common/models"
 )
 
 // SysLocGetPageReq 列表或者搜索使用结构体
@@ -32,7 +31,7 @@ type SysLocInsertReq struct {
 	Phone    string `json:"phone" comment:"手机" vd:"?"`                              //手机
 	Email    string `json:"email" comment:"邮箱" vd:"?"`                              //邮箱
 	Status   int    `json:"status" comment:"状态" vd:"$>0"`                           //状态
-	common.ControlBy
+
 }
 
 func (s *SysLocInsertReq) Generate(model *models.SysLoc) {
@@ -64,7 +63,7 @@ type SysLocUpdateReq struct {
 	Phone    string `json:"phone" comment:"手机" vd:"?"`                              //手机
 	Email    string `json:"email" comment:"邮箱" vd:"?"`                              //邮箱
 	Status   int    `json:"status" comment:"状态" vd:"$>0"`                           //状态
-	common.ControlBy
+
 }
 
 // Generate 结构体数据转化 从 SysLocControl 至 SysLoc 对应的模型

@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-admin-team/go-admin-core/sdk/api"
-	"github.com/go-admin-team/go-admin-core/sdk/pkg/jwtauth/user"
 	_ "github.com/go-admin-team/go-admin-core/sdk/pkg/response"
 
 	"SmartLinkProject/app/SLC/service"
@@ -110,7 +109,6 @@ func (e SysDictData) Insert(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	req.SetCreateBy(user.GetUserId(c))
 	err = s.Insert(&req)
 	if err != nil {
 		e.Error(500, err, "创建失败")
@@ -143,7 +141,6 @@ func (e SysDictData) Update(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	req.SetUpdateBy(user.GetUserId(c))
 	err = s.Update(&req)
 	if err != nil {
 		e.Error(500, err, "更新失败")
@@ -173,7 +170,6 @@ func (e SysDictData) Delete(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	req.SetUpdateBy(user.GetUserId(c))
 	err = s.Remove(&req)
 	if err != nil {
 		e.Error(500, err, "删除失败")

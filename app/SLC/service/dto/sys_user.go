@@ -39,7 +39,6 @@ func (m *SysUserGetPageReq) GetNeedSearch() interface{} {
 type ResetSysUserPwdReq struct {
 	UserId   int    `json:"userId" comment:"用户ID" vd:"$>0"` // 用户ID
 	Password string `json:"password" comment:"密码" vd:"len($)>0"`
-	common.ControlBy
 }
 
 func (s *ResetSysUserPwdReq) GetId() interface{} {
@@ -56,7 +55,6 @@ func (s *ResetSysUserPwdReq) Generate(model *models.SysUser) {
 type UpdateSysUserAvatarReq struct {
 	UserId int    `json:"userId" comment:"用户ID" vd:"len($)>0"` // 用户ID
 	Avatar string `json:"avatar" comment:"头像" vd:"len($)>0"`
-	common.ControlBy
 }
 
 func (s *UpdateSysUserAvatarReq) GetId() interface{} {
@@ -73,7 +71,6 @@ func (s *UpdateSysUserAvatarReq) Generate(model *models.SysUser) {
 type UpdateSysUserStatusReq struct {
 	UserId int    `json:"userId" comment:"用户ID" vd:"$>0"` // 用户ID
 	Status string `json:"status" comment:"状态" vd:"len($)>0"`
-	common.ControlBy
 }
 
 func (s *UpdateSysUserStatusReq) GetId() interface{} {
@@ -100,7 +97,6 @@ type SysUserInsertReq struct {
 	PostId   int    `json:"postId" comment:"岗位"`
 	Remark   string `json:"remark" comment:"备注"`
 	Status   string `json:"status" comment:"状态" vd:"len($)>0" default:"1"`
-	common.ControlBy
 }
 
 func (s *SysUserInsertReq) Generate(model *models.SysUser) {
@@ -118,7 +114,6 @@ func (s *SysUserInsertReq) Generate(model *models.SysUser) {
 	model.PostId = s.PostId
 	model.Remark = s.Remark
 	model.Status = s.Status
-	model.CreateBy = s.CreateBy
 }
 
 func (s *SysUserInsertReq) GetId() interface{} {
@@ -137,7 +132,6 @@ type SysUserUpdateReq struct {
 	PostId   int    `json:"postId" comment:"岗位"`
 	Remark   string `json:"remark" comment:"备注"`
 	Status   string `json:"status" comment:"状态" default:"1"`
-	common.ControlBy
 }
 
 func (s *SysUserUpdateReq) Generate(model *models.SysUser) {
@@ -162,7 +156,6 @@ func (s *SysUserUpdateReq) GetId() interface{} {
 
 type SysUserById struct {
 	dto.ObjectById
-	common.ControlBy
 }
 
 func (s *SysUserById) GetId() interface{} {

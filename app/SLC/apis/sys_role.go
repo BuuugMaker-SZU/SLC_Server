@@ -6,12 +6,12 @@ import (
 	"net/http"
 
 	"SmartLinkProject/app/SLC/models"
+
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-admin-team/go-admin-core/sdk"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-admin-team/go-admin-core/sdk/api"
-	"github.com/go-admin-team/go-admin-core/sdk/pkg/jwtauth/user"
 	_ "github.com/go-admin-team/go-admin-core/sdk/pkg/response"
 
 	"SmartLinkProject/app/SLC/service"
@@ -117,11 +117,6 @@ func (e SysRole) Insert(c *gin.Context) {
 		return
 	}
 
-	// 设置创建人
-	req.CreateBy = user.GetUserId(c)
-	if req.Status == "" {
-		req.Status = "2"
-	}
 	cb := sdk.Runtime.GetCasbinKey(c.Request.Host)
 	err = s.Insert(&req, cb)
 	if err != nil {
@@ -162,8 +157,6 @@ func (e SysRole) Update(c *gin.Context) {
 		return
 	}
 	cb := sdk.Runtime.GetCasbinKey(c.Request.Host)
-
-	req.SetUpdateBy(user.GetUserId(c))
 
 	err = s.Update(&req, cb)
 	if err != nil {
@@ -237,7 +230,6 @@ func (e SysRole) Update2Status(c *gin.Context) {
 		e.Error(500, err, fmt.Sprintf("更新角色状态失败，失败原因：%s ", err.Error()))
 		return
 	}
-	req.SetUpdateBy(user.GetUserId(c))
 	err = s.UpdateStatus(&req)
 	if err != nil {
 		e.Error(500, err, fmt.Sprintf("更新角色状态失败，失败原因：%s ", err.Error()))
@@ -269,12 +261,7 @@ func (e SysRole) Update2DataScope(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	data := &models.SysRole{
-		RoleId:    req.RoleId,
-		DataScope: req.DataScope,
-		LocIds:    req.LocIds,
-	}
-	data.UpdateBy = user.GetUserId(c)
+
 	err = s.UpdateDataScope(&req).Error
 	if err != nil {
 		e.Error(500, err, fmt.Sprintf("更新角色数据权限失败！错误详情：%s", err.Error()))
