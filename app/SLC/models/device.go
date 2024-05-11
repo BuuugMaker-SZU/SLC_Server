@@ -2,8 +2,7 @@ package models
 
 import (
 	"SmartLinkProject/common/models"
-
-	"gorm.io/gorm"
+	// "gorm.io/gorm"
 )
 
 type Device struct {
@@ -16,8 +15,6 @@ type Device struct {
 	Key        string      `json:"key" gorm:"size:255;comment:密钥"`          // 密钥
 	Status     string      `json:"status" gorm:"size:255;comment:状态"`       // 状态
 	QRCode     string      `json:"QRCode" gorm:"size:255;comment:二维码"`      // 二维码
-	LocIds     []int       `json:"locIds" gorm:"-"`
-	TypeIds    []int       `json:"typeIds" gorm:"-"`
 	Loc        *SysLoc     `json:"loc"`
 	Type       *Devicetype `json:"type"`
 
@@ -35,10 +32,4 @@ func (e *Device) Generate() models.ActiveRecord {
 
 func (e *Device) GetId() interface{} {
 	return e.DeviceId
-}
-
-func (e *Device) AfterFind(_ *gorm.DB) error {
-	e.LocIds = []int{e.LocId}
-	e.TypeIds = []int{e.TypeId}
-	return nil
 }

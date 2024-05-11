@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-admin-team/go-admin-core/sdk/api"
 	"github.com/go-admin-team/go-admin-core/sdk/pkg"
-	"github.com/go-admin-team/go-admin-core/sdk/pkg/jwtauth/user"
 	"github.com/go-admin-team/go-admin-core/sdk/pkg/response"
 
 	"SmartLinkProject/common/dto"
@@ -36,7 +35,6 @@ func CreateAction(control dto.Control) gin.HandlerFunc {
 			response.Error(c, 500, err, "模型生成失败")
 			return
 		}
-		object.SetCreateBy(user.GetUserId(c))
 		err = db.WithContext(c).Create(object).Error
 		if err != nil {
 			log.Errorf("Create error: %s", err)

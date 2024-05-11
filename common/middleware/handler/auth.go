@@ -60,6 +60,12 @@ func IdentityHandler(c *gin.Context) interface{} {
 // @Param account body Login  true "account"
 // @Success 200 {string} string "{"code": 200, "expire": "2019-08-07T12:45:48+08:00", "token": ".eyJleHAiOjE1NjUxNTMxNDgsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTU2NTE0OTU0OH0.-zvzHvbg0A" }"
 // @Router /api/v1/login [post]
+// Authenticator is a middleware handler function that handles authentication for requests.
+// It takes a Gin context as input and returns an interface{} and an error.
+// The interface{} represents the authenticated user and the error represents any authentication errors.
+// If authentication is successful, it returns the authenticated user and nil error.
+// If authentication fails, it returns nil and an error indicating the reason for authentication failure.
+// This function also logs the authentication status and username to the database.
 func Authenticator(c *gin.Context) (interface{}, error) {
 	log := api.GetRequestLogger(c)
 	db, err := pkg.GetOrm(c)
@@ -70,6 +76,7 @@ func Authenticator(c *gin.Context) (interface{}, error) {
 	}
 
 	var loginVals Login
+	
 	var status = "2"
 	var msg = "登录成功"
 	var username = ""

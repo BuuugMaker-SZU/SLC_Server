@@ -1,0 +1,1 @@
+SmartLinkProject.exe server -c config/settings.dev.yml

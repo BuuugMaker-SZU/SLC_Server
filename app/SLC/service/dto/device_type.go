@@ -9,7 +9,7 @@ type DeviceTypeGetPageReq struct {
 	TypeId   int    `form:"typeId" search:"type:exact;column:type_id;table:device_type" comment:"类型ID"`        // 类型ID
 	ParentId int    `form:"parentId" search:"type:exact;column:parent_id;table:device_type" comment:"上级类型"`    // 上级类型
 	TypeName string `form:"typeName" search:"type:contains;column:type_name;table:device_type" comment:"类型名称"` // 类型名称
-	TypePath string `form:"locPath" search:"type:exact;column:type_path;table:device_type" comment:""`         //路径
+	TypePath string `form:"typePath" search:"type:exact;column:type_path;table:device_type" comment:""`        //路径
 	Config   string `form:"config" search:"type:exact;column:config;table:device_type" comment:"配置类型"`         // 配置类型
 	Protocol string `form:"protocol" search:"type:exact;column:protocol;table:device_type" comment:"协议类型"`     // 协议类型
 	LOGO     string `form:"logo" search:"type:exact;column:logo;table:device_type" comment:"图标URL"`            // 图标URL
@@ -78,9 +78,9 @@ func (d *DeviceTypeUpdateReq) Generate(model *models.Devicetype) {
 }
 
 func (d *DeviceTypeInsertReq) Generate(model *models.Devicetype) {
-	// if d.TypeId != 0 {
-	// 	model.TypeId = d.TypeId
-	// }
+	if d.TypeId != 0 {
+		model.TypeId = d.TypeId
+	}
 	model.ParentId = d.ParentId
 	model.TypeName = d.TypeName
 	model.TypePath = d.TypePath
@@ -105,11 +105,11 @@ func (d *DeviceTypeInsertReq) GetId() interface{} {
 }
 
 type DeviceTypeGetReq struct {
-	id int `uri:"id"`
+	Id int `uri:"id"`
 }
 
 func (d *DeviceTypeGetReq) GetId() interface{} {
-	return d.id
+	return d.Id
 }
 
 type DeviceTypeDeleteReq struct {

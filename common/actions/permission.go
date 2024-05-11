@@ -15,7 +15,7 @@ import (
 type DataPermission struct {
 	DataScope string
 	UserId    int
-	DeptId    int
+	LocId     int
 	RoleId    int
 }
 
@@ -59,21 +59,35 @@ func newDataPermission(tx *gorm.DB, userId interface{}) (*DataPermission, error)
 	return p, nil
 }
 
+// 定义一个函数Permission，它接收一个表名tableName，一个指向DataPermission类型实例的指针p
 func Permission(tableName string, p *DataPermission) func(db *gorm.DB) *gorm.DB {
+	// 返回一个闭包函数，这个闭包函数接收一个指向gorm.DB类型实例的指针db
 	return func(db *gorm.DB) *gorm.DB {
+		// 检查是否启用了数据权限（EnableDP）
 		if !config.ApplicationConfig.EnableDP {
+			// 如果没有启用数据权限，则直接返回原始的db
 			return db
 		}
+		// 根据DataPermission实例中的DataScope字段的值，来决定如何添加查询条件
 		switch p.DataScope {
 		case "2":
-			return db.Where(tableName+".create_by in (select sys_user.user_id from sys_role_dept left join sys_user on sys_user.dept_id=sys_role_dept.dept_id where sys_role_dept.role_id = ?)", p.RoleId)
+			// 当DataScope为2时，添加查询条件，筛选出create_by字段在特定角色的用户列表中的记录
+			// 这里使用了SQL注入的预防措施，通过参数化查询来传递RoleId
+			return db.Where(tableName+".create_by in (select sys_user.user_id from sys_role_loc left join sys_user on sys_user.loc_id=sys_role_loc.loc_id where sys_role_loc.role_id = ?)", p.RoleId)
 		case "3":
-			return db.Where(tableName+".create_by in (SELECT user_id from sys_user where dept_id = ? )", p.DeptId)
+			// 当DataScope为3时，添加查询条件，筛选出create_by字段在特定区域的用户列表中的记录
+			// 同样使用参数化查询来传递DeptId
+			return db.Where(tableName+".create_by in (SELECT user_id from sys_user where loc_id = ? )", p.LocId)
 		case "4":
-			return db.Where(tableName+".create_by in (SELECT user_id from sys_user where sys_user.dept_id in(select dept_id from sys_dept where dept_path like ? ))", "%/"+pkg.IntToString(p.DeptId)+"/%")
+			// 当DataScope为4时，添加查询条件，筛选出create_by字段在特定地点路径下的用户列表中的记录
+			// 使用LIKE操作符和通配符来匹配地点路径，并且使用pkg.IntToString函数将p.LocId转换为字符串
+			return db.Where(tableName+".create_by in (SELECT user_id from sys_user where sys_user.loc_id in(select loc_id from sys_loc where loc_path like ? ))", "%/"+pkg.IntToString(p.LocId)+"/%")
 		case "5":
+			// 当DataScope为5时，添加查询条件，筛选出create_by字段等于特定用户ID的记录
+			// 使用参数化查询来传递UserId
 			return db.Where(tableName+".create_by = ?", p.UserId)
 		default:
+			// 如果DataScope的值不是上述任何一种，则不添加任何查询条件，直接返回原始的db
 			return db
 		}
 	}

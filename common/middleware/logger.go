@@ -115,8 +115,6 @@ func SetDBOperLog(c *gin.Context, clientIP string, statusCode int, reqUri string
 	l["latencyTime"] = latencyTime.String()
 	l["statusCode"] = statusCode
 	l["userAgent"] = c.Request.UserAgent()
-	l["createBy"] = user.GetUserId(c)
-	l["updateBy"] = user.GetUserId(c)
 	if status == http.StatusOK {
 		l["status"] = dto.OperaStatusEnabel
 	} else {

@@ -317,7 +317,6 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	Mmenu.Sort = 0
 	Mmenu.Visible = "0"
 	Mmenu.IsFrame = "0"
-	Mmenu.CreateBy = 1
 	s.Insert(&Mmenu)
 
 	Cmenu := dto.SysMenuInsertReq{}
@@ -334,8 +333,6 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	Cmenu.Sort = 0
 	Cmenu.Visible = "0"
 	Cmenu.IsFrame = "0"
-	Cmenu.CreateBy = 1
-	Cmenu.UpdateBy = 1
 	s.Insert(&Cmenu)
 
 	MList := dto.SysMenuInsertReq{}
@@ -351,8 +348,6 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	MList.Sort = 0
 	MList.Visible = "0"
 	MList.IsFrame = "0"
-	MList.CreateBy = 1
-	MList.UpdateBy = 1
 	s.Insert(&MList)
 
 	MCreate := dto.SysMenuInsertReq{}
@@ -368,8 +363,6 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	MCreate.Sort = 0
 	MCreate.Visible = "0"
 	MCreate.IsFrame = "0"
-	MCreate.CreateBy = 1
-	MCreate.UpdateBy = 1
 	s.Insert(&MCreate)
 
 	MUpdate := dto.SysMenuInsertReq{}
@@ -385,8 +378,6 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	MUpdate.Sort = 0
 	MUpdate.Visible = "0"
 	MUpdate.IsFrame = "0"
-	MUpdate.CreateBy = 1
-	MUpdate.UpdateBy = 1
 	s.Insert(&MUpdate)
 
 	MDelete := dto.SysMenuInsertReq{}
@@ -402,8 +393,6 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	MDelete.Sort = 0
 	MDelete.Visible = "0"
 	MDelete.IsFrame = "0"
-	MDelete.CreateBy = 1
-	MDelete.UpdateBy = 1
 	s.Insert(&MDelete)
 
 	e.OK("", "数据生成成功！")

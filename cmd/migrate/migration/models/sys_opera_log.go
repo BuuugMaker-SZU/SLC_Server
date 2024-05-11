@@ -26,7 +26,6 @@ type SysOperaLog struct {
 	UserAgent     string    `json:"userAgent" gorm:"type:varchar(255);comment:ua"`
 	CreatedAt     time.Time `json:"createdAt" gorm:"comment:创建时间"`
 	UpdatedAt     time.Time `json:"updatedAt" gorm:"comment:最后更新时间"`
-	ControlBy
 }
 
 func (SysOperaLog) TableName() string {

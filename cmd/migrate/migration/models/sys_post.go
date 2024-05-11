@@ -7,7 +7,7 @@ type SysPost struct {
 	Sort     int    `gorm:"size:4;" json:"sort"`                    //岗位排序
 	Status   int    `gorm:"size:4;" json:"status"`                  //状态
 	Remark   string `gorm:"size:255;" json:"remark"`                //描述
-	ControlBy
+
 	ModelTime
 }
 

@@ -36,7 +36,6 @@ type SysColumns struct {
 	FkLabelId          string `gorm:"" json:"fkLabelId"`
 	FkLabelName        string `gorm:"size:255;" json:"fkLabelName"`
 	ModelTime
-	ControlBy
 }
 
 func (SysColumns) TableName() string {

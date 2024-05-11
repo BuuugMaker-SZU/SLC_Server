@@ -1,8 +1,6 @@
 package main
 
-import (
-	"SmartLinkProject/cmd"
-)
+import "SmartLinkProject/cmd"
 
 //go:generate swag init --parseDependency --parseDepth=6 --instanceName admin -o ./docs/admin
 

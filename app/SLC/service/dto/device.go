@@ -14,9 +14,11 @@ type DeviceGetPageReq struct {
 	LocId          int    `form:"locId" search:"type:exact;column:loc_id;table:device" comment:"位置ID"`
 	DeviceName     string `form:"deviceName" search:"type:contains;column:device_name;table:device" comment:"设备名称"`
 	Status         string `form:"status" search:"type:exact;column:status;table:device" comment:"状态"`
-	QRCode         string `form:"qRCode" search:"type:contains;column:QR_code;table:device" comment:"二维码"`
-	DLocJoin       `search:"type:left;on:loc_id:loc_id;table:device;join:sys_loc"`
-	TypeJoin       `search:"type:left;on:type_id:type_id;table:device;join:device_type"`
+	QRCode         string `form:"qRCode" search:"type:contains;column:qr_code;table:device" comment:"二维码"`
+	SNCode         string `form:"sNCode" search:"type:contains;column:sn_code;table:device" comment:"序列号"`
+
+	DLocJoin `search:"type:left;on:loc_id:loc_id;table:device;join:sys_loc"`
+	TypeJoin `search:"type:left;on:type_id:type_id;table:device;join:device_type"`
 	DeviceOrder
 }
 
@@ -29,11 +31,11 @@ type DeviceOrder struct {
 }
 
 type DLocJoin struct {
-	LocId string `search:"type:contains;column:loc_path;table:device" form:"locId"`
+	LocId string `search:"type:contains;column:loc_path;table:sys_loc" form:"locId"`
 }
 
 type TypeJoin struct {
-	TypeId string `search:"type:contains;column:type_path;table:device" form:"typeId"`
+	TypeId string `search:"type:contains;column:type_path;table:device_type" form:"typeId"`
 }
 
 func (m *DeviceGetPageReq) GetNeedSearch() interface{} {
@@ -98,9 +100,9 @@ type DeviceUpdateReq struct {
 }
 
 func (d *DeviceUpdateReq) Generate(model *models.Device) {
-	// if d.DeviceId != 0 {
-	// 	model.DeviceId = d.DeviceId
-	// }
+	if d.DeviceId != 0 {
+		model.DeviceId = d.DeviceId
+	}
 	model.TypeId = d.TypeId
 	model.LocId = d.LocId
 	model.DeviceName = d.DeviceName

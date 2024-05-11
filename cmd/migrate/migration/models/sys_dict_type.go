@@ -6,7 +6,7 @@ type DictType struct {
 	DictType string `gorm:"size:128;" json:"dictType"` //字典类型
 	Status   int    `gorm:"size:4;" json:"status"`     //状态
 	Remark   string `gorm:"size:255;" json:"remark"`   //备注
-	ControlBy
+
 	ModelTime
 }
 

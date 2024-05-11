@@ -2,6 +2,7 @@ package models
 
 import (
 	"SmartLinkProject/common/models"
+
 	"gorm.io/gorm"
 )
 
@@ -17,7 +18,7 @@ type SysJob struct {
 	Concurrent     int    `json:"concurrent" gorm:"size:1;"`             // 是否并发
 	Status         int    `json:"status" gorm:"size:1;"`                 // 状态
 	EntryId        int    `json:"entry_id" gorm:"size:11;"`              // job启动时返回的id
-	models.ControlBy
+
 	models.ModelTime
 
 	DataScope string `json:"dataScope" gorm:"-"`
@@ -34,14 +35,6 @@ func (e *SysJob) Generate() models.ActiveRecord {
 
 func (e *SysJob) GetId() interface{} {
 	return e.JobId
-}
-
-func (e *SysJob) SetCreateBy(createBy int) {
-	e.CreateBy = createBy
-}
-
-func (e *SysJob) SetUpdateBy(updateBy int) {
-	e.UpdateBy = updateBy
 }
 
 func (e *SysJob) GetList(tx *gorm.DB, list interface{}) (err error) {

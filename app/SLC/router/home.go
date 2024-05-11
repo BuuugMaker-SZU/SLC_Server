@@ -15,8 +15,9 @@ func init() {
 // 需认证的路由代码
 func registerHomeRouter(v1 *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware) {
 	api := apis.Home{}
-	v1.Group("/home").Use(authMiddleware.MiddlewareFunc()).Use(middleware.AuthCheckRole()).Use(actions.PermissionAction())
+	// 注册路由为 "/home"，并添加中间件
+	r := v1.Group("/home").Use(authMiddleware.MiddlewareFunc()).Use(middleware.AuthCheckRole()).Use(actions.PermissionAction())
 	{
-		v1.GET("", api.GetHomeStats) // 获取首页统计信息
+		r.GET("", api.GetHomeStats) // 获取首页统计信息
 	}
 }

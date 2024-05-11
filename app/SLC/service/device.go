@@ -43,7 +43,7 @@ func (e *Device) GetPage(c *dto.DeviceGetPageReq, p *actions.DataPermission, lis
 func (e *Device) Get(d *dto.DeviceById, p *actions.DataPermission, model *models.Device) error {
 	var data models.Device
 
-	err := e.Orm.Model(&data).Debug().
+	err := e.Orm.Model(&data).Debug().Preload("Loc").Preload("Type").
 		Scopes(
 			actions.Permission(data.TableName(), p),
 		).
@@ -65,13 +65,13 @@ func (e *Device) Insert(c *dto.DeviceInsertReq) error {
 	var err error
 	var data models.Device
 	var i int64
-	err = e.Orm.Model(&data).Where("deviceName = ?", c.DeviceName).Count(&i).Error
+	err = e.Orm.Model(&data).Where("device_name = ?", c.DeviceName).Count(&i).Error
 	if err != nil {
 		e.Log.Errorf("db error: %s", err)
 		return err
 	}
 	if i > 0 {
-		err := errors.New("用户名已存在！")
+		err := errors.New("设备名已存在！")
 		e.Log.Errorf("db error: %s", err)
 		return err
 	}
@@ -88,17 +88,12 @@ func (e *Device) Insert(c *dto.DeviceInsertReq) error {
 func (e *Device) Update(c *dto.DeviceUpdateReq, p *actions.DataPermission) error {
 	var err error
 	var model models.Device
-	db := e.Orm.Scopes(
-		actions.Permission(model.TableName(), p),
-	).First(&model, c.GetId())
+	db := e.Orm.First(&model, c.GetId())
 	if err = db.Error; err != nil {
 		e.Log.Errorf("Service UpdateDevice error: %s", err)
 		return err
 	}
-	if db.RowsAffected == 0 {
-		return errors.New("无权更新该数据")
 
-	}
 	c.Generate(&model)
 	update := e.Orm.Model(&model).Where("device_id = ?", &model.DeviceId).Updates(&model)
 	if err = update.Error; err != nil {
@@ -106,7 +101,7 @@ func (e *Device) Update(c *dto.DeviceUpdateReq, p *actions.DataPermission) error
 		return err
 	}
 	if update.RowsAffected == 0 {
-		err = errors.New("update userinfo error")
+		err = errors.New("update device error")
 		log.Warnf("db update error")
 		return err
 	}
@@ -117,9 +112,7 @@ func (e *Device) Update(c *dto.DeviceUpdateReq, p *actions.DataPermission) error
 func (e *Device) UpdateStatus(c *dto.UpdateDeviceStatusReq, p *actions.DataPermission) error {
 	var err error
 	var model models.Device
-	db := e.Orm.Scopes(
-		actions.Permission(model.TableName(), p),
-	).First(&model, c.GetId())
+	db := e.Orm.First(&model, c.GetId())
 	if err = db.Error; err != nil {
 		e.Log.Errorf("Service UpdateDevice error: %s", err)
 		return err
@@ -160,10 +153,5 @@ func (e *Device) GetProfile(c *dto.DeviceById, device *models.Device) error {
 	if err != nil {
 		return err
 	}
-	// err = e.Orm.Find(roles, user.RoleId).Error
-	// if err != nil {
-	// 	return err
-	// }
-
 	return nil
 }

@@ -8,7 +8,7 @@ type SysConfig struct {
 	ConfigType  string `json:"configType" gorm:"type:varchar(64);comment:ConfigType"`
 	IsFrontend  int    `json:"isFrontend" gorm:"type:varchar(64);comment:是否前台"`
 	Remark      string `json:"remark" gorm:"type:varchar(128);comment:Remark"`
-	ControlBy
+
 	ModelTime
 }
 

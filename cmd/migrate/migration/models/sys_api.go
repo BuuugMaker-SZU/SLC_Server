@@ -8,7 +8,6 @@ type SysApi struct {
 	Type   string `json:"type" gorm:"size:16;comment:接口类型"`
 	Action string `json:"action" gorm:"size:16;comment:请求类型"`
 	ModelTime
-	ControlBy
 }
 
 func (SysApi) TableName() string {

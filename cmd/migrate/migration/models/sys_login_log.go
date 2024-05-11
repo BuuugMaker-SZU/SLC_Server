@@ -18,7 +18,6 @@ type SysLoginLog struct {
 	Msg           string    `json:"msg" gorm:"type:varchar(255);comment:信息"`
 	CreatedAt     time.Time `json:"createdAt" gorm:"comment:创建时间"`
 	UpdatedAt     time.Time `json:"updatedAt" gorm:"comment:最后更新时间"`
-	ControlBy
 }
 
 func (SysLoginLog) TableName() string {

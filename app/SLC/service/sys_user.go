@@ -44,7 +44,7 @@ func (e *SysUser) GetPage(c *dto.SysUserGetPageReq, p *actions.DataPermission, l
 func (e *SysUser) Get(d *dto.SysUserById, p *actions.DataPermission, model *models.SysUser) error {
 	var data models.SysUser
 
-	err := e.Orm.Model(&data).Debug().
+	err := e.Orm.Model(&data).Debug().Preload("Loc").Preload("Role").
 		Scopes(
 			actions.Permission(data.TableName(), p),
 		).

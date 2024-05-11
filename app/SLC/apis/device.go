@@ -1,69 +1,71 @@
+// apis包定义了SmartLinkProject的API接口
 package apis
 
 import (
-	"SmartLinkProject/app/SLC/models"
-	"net/http"
+	"SmartLinkProject/app/SLC/models" // 导入项目中的设备模型
+	"net/http"                        // 导入net包，用于处理HTTP相关功能
 
-	"github.com/gin-gonic/gin/binding"
+	"github.com/gin-gonic/gin"         // 导入Gin框架，用于处理HTTP请求
+	"github.com/gin-gonic/gin/binding" // 导入Gin框架的binding功能，用于数据绑定
 
-	"github.com/gin-gonic/gin"
-	"github.com/go-admin-team/go-admin-core/sdk/api"
+	"github.com/go-admin-team/go-admin-core/sdk/api" // 导入go-admin-core的api模块
+	// 导入go-admin-core的response模块，虽然未使用，但可能用于响应处理
 	_ "github.com/go-admin-team/go-admin-core/sdk/pkg/response"
 
-	"SmartLinkProject/app/SLC/service"
-	"SmartLinkProject/app/SLC/service/dto"
-	"SmartLinkProject/common/actions"
+	"SmartLinkProject/app/SLC/service"     // 导入项目中的设备服务层
+	"SmartLinkProject/app/SLC/service/dto" // 导入项目中的设备数据传输对象（DTO）
+
+	"SmartLinkProject/common/actions" // 导入项目中的权限操作
 )
 
 type Device struct {
 	api.Api
 }
 
-// GetPage
-// @Summary 列表用户信息数据
-// @Description 获取JSON
-// @Tags 用户
-// @Param username query string false "username"
-// @Success 200 {string} {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys-user [get]
-// @Security Bearer
 func (e Device) GetPage(c *gin.Context) {
+	// 实例化设备服务
 	s := service.Device{}
+	// 初始化设备分页请求数据传输对象（DTO）
 	req := dto.DeviceGetPageReq{}
+	// 绑定请求数据到req DTO，创建ORM和上下文，并将服务实例赋值给s
 	err := e.MakeContext(c).
 		MakeOrm().
 		Bind(&req).
 		MakeService(&s.Service).
 		Errors
 	if err != nil {
+		// 记录错误日志并返回500错误响应
 		e.Logger.Error(err)
 		e.Error(500, err, err.Error())
 		return
 	}
 
-	//数据权限检查
+	// 从Gin上下文中获取当前用户的权限信息
 	p := actions.GetPermissionFromContext(c)
 
+	// 准备用于接收查询结果的切片和计数器变量
 	list := make([]models.Device, 0)
 	var count int64
 
+	// 调用服务层的GetPage方法来获取设备分页列表和总记录数
 	err = s.GetPage(&req, p, &list, &count)
 	if err != nil {
+		// 如果服务层返回错误，返回500错误响应
 		e.Error(500, err, "查询失败")
 		return
 	}
 
+	// 返回分页成功的响应，包括设备列表、当前页码、每页大小和总记录数
 	e.PageOK(list, int(count), req.GetPageIndex(), req.GetPageSize(), "查询成功")
 }
 
-// Get
-// @Summary 获取用户
-// @Description 获取JSON
-// @Tags 用户
-// @Param userId path int true "用户编码"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys-user/{userId} [get]
-// @Security Bearer
+// 其他方法（如Get、Insert、Update、Delete、UpdateStatus、GetProfile）遵循类似的模式：
+// 1. 实例化服务层对象
+// 2. 初始化请求数据传输对象（DTO）
+// 3. 绑定请求数据到DTO并创建服务层上下文
+// 4. 执行服务层方法，并处理错误
+// 5. 根据服务层执行结果返回相应的HTTP响应
+
 func (e Device) Get(c *gin.Context) {
 	s := service.Device{}
 	req := dto.DeviceById{}
@@ -88,16 +90,6 @@ func (e Device) Get(c *gin.Context) {
 	e.OK(object, "查询成功")
 }
 
-// Insert
-// @Summary 创建用户
-// @Description 获取JSON
-// @Tags 用户
-// @Accept  application/json
-// @Product application/json
-// @Param data body dto.SysUserInsertReq true "用户数据"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys-user [post]
-// @Security Bearer
 func (e Device) Insert(c *gin.Context) {
 	s := service.Device{}
 	req := dto.DeviceInsertReq{}
@@ -111,7 +103,6 @@ func (e Device) Insert(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-
 	err = s.Insert(&req)
 	if err != nil {
 		e.Logger.Error(err)
@@ -122,16 +113,6 @@ func (e Device) Insert(c *gin.Context) {
 	e.OK(req.GetId(), "创建成功")
 }
 
-// Update
-// @Summary 修改用户数据
-// @Description 获取JSON
-// @Tags 用户
-// @Accept  application/json
-// @Product application/json
-// @Param data body dto.SysUserUpdateReq true "body"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys-user/{userId} [put]
-// @Security Bearer
 func (e Device) Update(c *gin.Context) {
 	s := service.Device{}
 	req := dto.DeviceUpdateReq{}
@@ -157,14 +138,6 @@ func (e Device) Update(c *gin.Context) {
 	e.OK(req.GetId(), "更新成功")
 }
 
-// Delete
-// @Summary 删除用户数据
-// @Description 删除数据
-// @Tags 用户
-// @Param userId path int true "userId"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys-user/{userId} [delete]
-// @Security Bearer
 func (e Device) Delete(c *gin.Context) {
 	s := service.Device{}
 	req := dto.DeviceById{}
@@ -190,16 +163,6 @@ func (e Device) Delete(c *gin.Context) {
 	e.OK(req.GetId(), "删除成功")
 }
 
-// UpdateStatus 修改用户状态
-// @Summary 修改用户状态
-// @Description 获取JSON
-// @Tags 用户
-// @Accept  application/json
-// @Product application/json
-// @Param data body dto.UpdateSysUserStatusReq true "body"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /api/v1/user/status [put]
-// @Security Bearer
 func (e Device) UpdateStatus(c *gin.Context) {
 	s := service.Device{}
 	req := dto.UpdateDeviceStatusReq{}
@@ -225,16 +188,10 @@ func (e Device) UpdateStatus(c *gin.Context) {
 	e.OK(req.GetId(), "更新成功")
 }
 
-// GetProfile
-// @Summary 获取个人中心用户
-// @Description 获取JSON
-// @Tags 个人中心
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /api/v1/user/profile [get]
-// @Security Bearer
 func (e Device) GetProfile(c *gin.Context) {
 	s := service.Device{}
 	req := dto.DeviceById{}
+
 	err := e.MakeContext(c).
 		MakeOrm().
 		MakeService(&s.Service).
@@ -245,16 +202,14 @@ func (e Device) GetProfile(c *gin.Context) {
 		return
 	}
 
-	// req.Id = user.GetUserId(c)
-
 	device := models.Device{}
 	err = s.GetProfile(&req, &device)
 	if err != nil {
-		e.Logger.Errorf("get user profile error, %s", err.Error())
+		e.Logger.Errorf("get device profile error, %s", err.Error())
 		e.Error(500, err, "获取设备信息失败")
 		return
 	}
 	e.OK(gin.H{
-		"user": device,
+		"device": device,
 	}, "查询成功")
 }

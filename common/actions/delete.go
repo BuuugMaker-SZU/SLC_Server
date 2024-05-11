@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/go-admin-team/go-admin-core/logger"
 	"github.com/go-admin-team/go-admin-core/sdk/pkg"
-	"github.com/go-admin-team/go-admin-core/sdk/pkg/jwtauth/user"
 	"github.com/go-admin-team/go-admin-core/sdk/pkg/response"
 
 	"SmartLinkProject/common/dto"
@@ -37,8 +36,6 @@ func DeleteAction(control dto.Control) gin.HandlerFunc {
 			response.Error(c, 500, err, "模型生成失败")
 			return
 		}
-
-		object.SetUpdateBy(user.GetUserId(c))
 
 		//数据权限检查
 		p := GetPermissionFromContext(c)

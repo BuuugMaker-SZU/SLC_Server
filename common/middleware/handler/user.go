@@ -2,6 +2,7 @@ package handler
 
 import (
 	"SmartLinkProject/common/models"
+
 	"gorm.io/gorm"
 )
 
@@ -23,7 +24,7 @@ type SysUser struct {
 	PostIds  []int  `json:"postIds" gorm:"-"`
 	RoleIds  []int  `json:"roleIds" gorm:"-"`
 	//Dept     *SysDept `json:"dept"`
-	models.ControlBy
+
 	models.ModelTime
 }
 

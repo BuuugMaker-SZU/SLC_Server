@@ -41,8 +41,6 @@ type SysColumns struct {
 	FkCol              []SysColumns `gorm:"-" json:"fkCol"`
 	FkLabelId          string       `gorm:"" json:"fkLabelId"`
 	FkLabelName        string       `gorm:"size:255;" json:"fkLabelName"`
-	CreateBy           int          `gorm:"column:create_by;size:20;" json:"createBy"`
-	UpdateBy           int          `gorm:"column:update_By;size:20;" json:"updateBy"`
 
 	models.BaseModel
 }
@@ -74,7 +72,6 @@ func (e *SysColumns) GetList(tx *gorm.DB, exclude bool) ([]SysColumns, error) {
 
 func (e *SysColumns) Create(tx *gorm.DB) (SysColumns, error) {
 	var doc SysColumns
-	e.CreateBy = 0
 	result := tx.Table("sys_columns").Create(&e)
 	if result.Error != nil {
 		err := result.Error
@@ -91,7 +88,6 @@ func (e *SysColumns) Update(tx *gorm.DB) (update SysColumns, err error) {
 
 	//参数1:是要修改的数据
 	//参数2:是修改的数据
-	e.UpdateBy = 0
 	if err = tx.Table("sys_columns").Model(&update).Updates(&e).Error; err != nil {
 		return
 	}

@@ -13,7 +13,6 @@ type SysJob struct {
 	Status         int    `json:"status" gorm:"size:1;"`                 // 状态
 	EntryId        int    `json:"entry_id" gorm:"size:11;"`              // job启动时返回的id
 	ModelTime
-	ControlBy
 }
 
 func (SysJob) TableName() string {

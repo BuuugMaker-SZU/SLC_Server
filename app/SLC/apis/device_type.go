@@ -96,7 +96,6 @@ func (e DeviceType) Update(c *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-
 	err = s.Update(&req)
 	if err != nil {
 		e.Error(500, err, err.Error())

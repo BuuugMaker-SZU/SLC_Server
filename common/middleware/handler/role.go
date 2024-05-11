@@ -15,7 +15,7 @@ type SysRole struct {
 	Params    string `json:"params" gorm:"-"`
 	MenuIds   []int  `json:"menuIds" gorm:"-"`
 	DeptIds   []int  `json:"deptIds" gorm:"-"`
-	models.ControlBy
+
 	models.ModelTime
 }
 

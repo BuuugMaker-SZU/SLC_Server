@@ -130,7 +130,7 @@ func (e *DeviceType) Remove(d *dto.DeviceTypeDeleteReq) error {
 }
 
 // GetDeviceTypeList 获取设备类型列表
-func (e *DeviceType) GetList(c *dto.DeviceTypeGetPageReq, list *[]models.Devicetype) error {
+func (e *DeviceType) getList(c *dto.DeviceTypeGetPageReq, list *[]models.Devicetype) error {
 	var err error
 	var data models.Devicetype
 	err = e.Orm.Model(&data).
@@ -148,13 +148,15 @@ func (e *DeviceType) GetList(c *dto.DeviceTypeGetPageReq, list *[]models.Devicet
 // SetDeviceTypeTree 设置设备类型树形结构
 func (e *DeviceType) SetDeviceTypeTree(c *dto.DeviceTypeGetPageReq) (m []dto.DeviceTypeLabel, err error) {
 	var list []models.Devicetype
-	err = e.GetList(c, &list)
+	err = e.getList(c, &list)
 	m = make([]dto.DeviceTypeLabel, 0)
 	for i := 0; i < len(list); i++ {
 		if list[i].ParentId != 0 {
 			continue
 		}
-		e := dto.DeviceTypeLabel{Id: list[i].TypeId, Label: list[i].TypeName}
+		e := dto.DeviceTypeLabel{}
+		e.Id = list[i].TypeId
+		e.Label = list[i].TypeName
 		typesInfo := deviceTypeTreeCall(&list, e)
 
 		m = append(m, typesInfo)
@@ -181,7 +183,7 @@ func deviceTypeTreeCall(TypeList *[]models.Devicetype, deviceType dto.DeviceType
 // SetDeviceTypePage 设置设备类型页面数据
 func (e *DeviceType) SetDeviceTypePage(c *dto.DeviceTypeGetPageReq) (m []models.Devicetype, err error) {
 	var list []models.Devicetype
-	err = e.GetList(c, &list)
+	err = e.getList(c, &list)
 	for i := 0; i < len(list); i++ {
 		if list[i].ParentId != 0 {
 			continue
@@ -189,7 +191,7 @@ func (e *DeviceType) SetDeviceTypePage(c *dto.DeviceTypeGetPageReq) (m []models.
 		info := e.TypePageCall(&list, list[i])
 		m = append(m, info)
 	}
-	return list, err
+	return
 }
 
 func (e *DeviceType) TypePageCall(deviceTypeList *[]models.Devicetype, menu models.Devicetype) models.Devicetype {
@@ -207,6 +209,7 @@ func (e *DeviceType) TypePageCall(deviceTypeList *[]models.Devicetype, menu mode
 		mt.Protocol = list[j].Protocol
 		mt.LOGO = list[j].LOGO
 		mt.CreatedAt = list[j].CreatedAt
+		mt.Children = []models.Devicetype{}
 		min = append(min, mt)
 	}
 	menu.Children = min
@@ -215,7 +218,7 @@ func (e *DeviceType) TypePageCall(deviceTypeList *[]models.Devicetype, menu mode
 
 // SetDeviceTypeLabel 设置设备类型标签
 func (e *DeviceType) SetDeviceTypeLabel() (m []dto.DeviceTypeLabel, err error) {
-	var list []models.Devicetype
+	list := make([]models.Devicetype, 0)
 	err = e.Orm.Find(&list).Error
 	if err != nil {
 		log.Error("find device type list error, %s", err.Error())
